@@ -2,6 +2,7 @@
     <div class="flex-row" style="justify-content: space-between; align-items: center;">
         <el-button class="btn-print" type="primary" @click="print">Export to pdf</el-button>
         <el-button class="btn-csv" type="primary" @click="exportToCsv">Export to csv</el-button>
+        <el-button class="btn-html" type="primary" @click="exportToHtml">Export to html</el-button>
     </div>
 
 
@@ -41,7 +42,7 @@
 import axios from 'axios'
 import BarChart from './BarChart.vue'
 import Global from './Global';
-import {exportPDF, exportCSV} from './../utils/util'
+import {exportPDF, exportCSV, exportHTML} from './../utils/util'
 
 let loading
 
@@ -152,7 +153,10 @@ export default {
         },
         exportToCsv(){
             exportCSV(this.chartData.labels, this.chartData.datasets[0].data)
-        }
+        },
+        exportToHtml(){
+            exportHTML('bar-chart', 'chart.html')
+        },
     },
     mounted() {
         this.server_url = Global.fileSrc + '/uploadFile'
@@ -188,7 +192,14 @@ export default {
     border-radius: 30px;
     box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
 }
-
+.btn-html {
+    top: 70px;
+    right: 390px;
+    position: fixed;
+    z-index: 100;
+    border-radius: 30px;
+    box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
+}
 
 
 .el-upload {
