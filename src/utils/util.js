@@ -42,6 +42,8 @@ export function exportPDF(eleId, pdfName) {
  * 
  * @param labels fields from x-axis
  * @param data  data from y-axis
+ * 
+ * Generate CSV file based on the data from x-axis and y-axis
  */
 
 export function exportCSV(labels, data) {

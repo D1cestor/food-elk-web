@@ -1,19 +1,19 @@
 <template>
-    <div class="flex-row" style="justify-content: space-between; align-items: center;">
-        <el-button class="btn-print" type="primary" @click="print">Export to pdf</el-button>
-        <el-button class="btn-csv" type="primary" @click="exportToCsv">Export to csv</el-button>
-        <el-button class="btn-html" type="primary" @click="exportToHtml">Export to html</el-button>
-    </div>
+    <div class="panel">
+        <div class="flex-row">
+            <el-button class="btn" type="primary" @click="print">Export to pdf</el-button>
+            <el-button class="btn" type="primary" @click="exportToCsv">Export to csv</el-button>
+            <el-button class="btn" type="primary" @click="exportToHtml">Export to html</el-button>
+            <el-button class="btn" type="primary" @click="handleUpdate">Upload File</el-button>
+        </div>
 
-
-    <div>
-        <el-button class="btn-upload" type="primary" @click="handleUpdate">Upload File</el-button>
         <el-dialog v-model="dialogVisible" width="30%">
             <span>
                 <el-upload class="upload-demo" ref="upload" drag :action="server_url" multiple :auto-upload="false"
                     :limit="1" :on-success="handleFilUploadSuccess" :on-remove="handleRemove">
                     <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">Drag the file here, or <em>click here to upload the file</em></div>
+                    <div class="el-upload__text">Drag the file here, or <em>click here to upload the file</em>
+                    </div>
 
                 </el-upload>
             </span>
@@ -22,27 +22,33 @@
                 <el-button type="primary" @click="handleUpload">Confirm</el-button>
             </span>
         </el-dialog>
+
+        <div class="select-row">
+            <select v-model="selected_index" class="select-cell">
+                <option v-for="i in index" v-bind:value="i">
+                    {{ i }}
+                </option>
+            </select>
+
+            <select v-model="selected_field" class="select-cell">
+                <option v-for="field in fields" v-bind:value="field">
+                    {{ field }}
+                </option>
+            </select>
+        </div>
+
+        <div class="chart">
+            <BarChart :chart-data="chartData" />
+        </div>
+
     </div>
-
-    <select v-model="selected_index" :style="{ height: 50 + 'px' }">
-        <option v-for="i in index" v-bind:value="i">
-            {{ i }}
-        </option>
-    </select>
-
-    <select v-model="selected_field" :style="{ height: 50 + 'px' }">
-        <option v-for="field in fields" v-bind:value="field">
-            {{ field }}
-        </option>
-    </select>
-    <BarChart :chart-data="chartData" />
 </template>
 
 <script>
 import axios from 'axios'
 import BarChart from './BarChart.vue'
-import Global from './Global';
-import {exportPDF, exportCSV, exportHTML} from './../utils/util'
+import Global from '../utils/Global';
+import { exportPDF, exportCSV, exportHTML } from './../utils/util'
 
 let loading
 
@@ -77,6 +83,7 @@ export default {
                 url: Global.querySrc + '/aggregation',
                 data: { "index": this.selected_index, "field": newSelectedField }
             }).then(res => {
+                console.log(res)
                 this.chartData.labels = []
                 this.chartData.datasets[0].data = []
                 for (const v of res.data) {
@@ -151,10 +158,10 @@ export default {
         print() {
             exportPDF('bar-chart', 'bar-chart')
         },
-        exportToCsv(){
+        exportToCsv() {
             exportCSV(this.chartData.labels, this.chartData.datasets[0].data)
         },
-        exportToHtml(){
+        exportToHtml() {
             exportHTML('bar-chart', 'chart.html')
         },
     },
@@ -166,39 +173,34 @@ export default {
 }
 </script>
 <style scoped>
-.btn-upload {
-    top: 70px;
-    right: 40px;
-    position: fixed;
+.chart {
+    width: 50%;
+}
+
+
+.select-cell {
+    height: 50px;
+    width: 50%;
+}
+
+.panel {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-around; */
+    width: 100vh;
+    padding-bottom: 50px;
+}
+
+.btn {
     z-index: 100;
     border-radius: 30px;
     box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
 }
 
-.btn-print {
-    top: 70px;
-    right: 150px;
-    position: fixed;
-    z-index: 100;
-    border-radius: 30px;
-    box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
-}
-
-.btn-csv {
-    top: 70px;
-    right: 270px;
-    position: fixed;
-    z-index: 100;
-    border-radius: 30px;
-    box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
-}
-.btn-html {
-    top: 70px;
-    right: 390px;
-    position: fixed;
-    z-index: 100;
-    border-radius: 30px;
-    box-shadow: 0 2px 12px 0 rgba(91, 156, 255, 0.9)
+.select-row {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 
 
@@ -208,7 +210,8 @@ export default {
 
 .flex-row {
     display: flex;
-    flex-flow: row nowrap;
+    flex-direction: row;
+    margin-bottom: 10px;
+    gap: 10px;
 }
-
 </style>

@@ -1,6 +1,4 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 import GraphDisplayVue from './components/GraphDisplay.vue';
 
 </script>
@@ -17,9 +15,12 @@ import GraphDisplayVue from './components/GraphDisplay.vue';
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div> -->
+    <GraphDisplayVue></GraphDisplayVue>
+    <br>
+    <GraphDisplayVue></GraphDisplayVue>
 
   
-  <GraphDisplayVue></GraphDisplayVue>
+  <!-- <GraphDisplayVue></GraphDisplayVue> -->
   <!-- </header> -->
   
   <!-- <BarChart/> -->
