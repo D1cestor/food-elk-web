@@ -1,4 +1,5 @@
 <script setup>
+import ComparisonDisplay from './components/ComparisonDisplay.vue';
 import GraphDisplayVue from './components/GraphDisplay.vue';
 
 </script>
@@ -17,7 +18,7 @@ import GraphDisplayVue from './components/GraphDisplay.vue';
     </div> -->
     <GraphDisplayVue></GraphDisplayVue>
     <br>
-    <GraphDisplayVue></GraphDisplayVue>
+    <ComparisonDisplay></ComparisonDisplay>
 
   
   <!-- <GraphDisplayVue></GraphDisplayVue> -->
