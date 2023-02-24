@@ -25,12 +25,14 @@
 
         <div class="select-row">
             <select v-model="selected_index" class="select-cell">
+                <option value="" disabled selected>Select a file</option>
                 <option v-for="i in index" v-bind:value="i">
                     {{ i }}
                 </option>
             </select>
 
             <select v-model="selected_field" class="select-cell">
+                <option value="" disabled selected>Choose the specified attribute</option>
                 <option v-for="field in fields" v-bind:value="field">
                     {{ field }}
                 </option>
@@ -186,6 +188,7 @@ export default {
 .panel {
     display: flex;
     flex-direction: column;
+    vertical-align: top;
     /* justify-content: space-around; */
     width: 100vh;
     padding-bottom: 50px;
@@ -210,6 +213,7 @@ export default {
 
 .flex-row {
     display: flex;
+   
     flex-direction: row;
     margin-bottom: 10px;
     gap: 10px;

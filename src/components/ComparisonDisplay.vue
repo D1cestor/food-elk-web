@@ -24,17 +24,20 @@
 
         <div class="select-row">
             <select v-model="selected_index" class="select-cell">
+                <option value="" disabled selected>Select a file</option>
                 <option v-for="i in index" v-bind:value="i">
                     {{ i }}
                 </option>
             </select>
             <select v-model="selected_index2" class="select-cell">
+                <option value="" disabled selected>Select another file to compare</option>
                 <option v-for="i in index" v-bind:value="i">
                     {{ i }}
                 </option>
             </select>
 
             <select v-model="selected_field" class="select-cell">
+                <option value="" disabled selected>Choose the specified attribute</option>
                 <option v-for="field in fields" v-bind:value="field">
                     {{ field }}
                 </option>
@@ -224,8 +227,9 @@ export default {
     width: 50%;
 }
 
-.panel {
-    display: flex;
+.panel1 {
+    /*display: flex;*/
+    display: inline-block;
     flex-direction: column;
     /* justify-content: space-around; */
     width: 100vh;
@@ -250,7 +254,9 @@ export default {
 }
 
 .flex-row {
-    display: flex;
+    display: inline-block;
+  vertical-align: top;
+    /*display: flex;*/
     flex-direction: row;
     margin-bottom: 10px;
     gap: 10px;
