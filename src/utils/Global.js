@@ -1,8 +1,5 @@
 const mode = 'f'
 
-
-
-
 let fileSrc = ''
 let querySrc = ''
 if (mode == 'f')

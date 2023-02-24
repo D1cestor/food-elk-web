@@ -4,25 +4,9 @@
             <el-button class="btn" type="primary" @click="print">Export to pdf</el-button>
             <el-button class="btn" type="primary" @click="exportToCsv">Export to csv</el-button>
             <el-button class="btn" type="primary" @click="exportToHtml">Export to html</el-button>
-            <el-button class="btn" type="primary" @click="handleUpdate">Upload File</el-button>
+            <el-button class="btn" type="primary" @click="showUploadfile">Upload File</el-button>
         </div>
-
-        <el-dialog v-model="dialogVisible" width="30%">
-            <span>
-                <el-upload class="upload-demo" ref="upload" drag :action="server_url" multiple :auto-upload="false"
-                    :limit="1" :on-success="handleFilUploadSuccess" :on-remove="handleRemove">
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">Drag the file here, or <em>click here to upload the file</em>
-                    </div>
-
-                </el-upload>
-            </span>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="handleUpload">Confirm</el-button>
-            </span>
-        </el-dialog>
-
+        <UploadFile :dialogVisible = dialogVisible :server_url = server_url @disapper="HideUploadfile"></UploadFile>
         <div class="select-row">
             <select v-model="selected_index" class="select-cell">
                 <option v-for="i in index" v-bind:value="i">
@@ -37,9 +21,16 @@
             </select>
         </div>
 
-        <div class="chart">
-            <BarChart :chart-data="chartData" />
+        <div class="select-row">
+            <div class="chart">
+                <BarChart :chart-data="chartData" />
+            </div>
+            <div style="color: black;">
+                {{ missing }}% of data is missing
+            </div>
         </div>
+
+        
 
     </div>
 </template>
@@ -47,20 +38,22 @@
 <script>
 import axios from 'axios'
 import BarChart from './BarChart.vue'
+import UploadFile from './UploadFile.vue';
 import Global from '../utils/Global';
 import { exportPDF, exportCSV, exportHTML } from './../utils/util'
 
-let loading
 
 export default {
     components: {
-        BarChart
+        BarChart,
+        UploadFile
     },
     props: {},
     data() {
         return {
             selected_index: '',
             selected_field: '',
+            missing: 0,
             index: [],
             fields: [],
             chartData: {
@@ -94,6 +87,16 @@ export default {
             }).catch(err => {
                 console.log(err)
             })
+            axios({
+                method: 'post',
+                url: Global.querySrc + '/quality',
+                data: { "index": this.selected_index, "field": newSelectedField }
+            }).then(res => {
+                this.missing = res.data
+            }).catch(err => {
+                console.log(err)
+            })
+
         },
         selected_index(newSelectedIndex, oldSelectedField) {
             console.log(newSelectedIndex)
@@ -110,27 +113,12 @@ export default {
         }
     },
     methods: {
-        handleRemove(file, fileList) {
-            console.log(file, fileList);
-        },
-        submitUpload() {
-            console.log(this.server_url)
-            this.$refs.upload.submit();
-            this.start_loading()
-        },
-        handleFilUploadSuccess(res, file, fileList) {
-            console.log(res, file, fileList)
-            this.stop_loading()
-            this.$message.success("Upload Successfully!")
-            this.getIndex()
-        },
-        handleUpdate() {
+        showUploadfile() {
             this.dialogVisible = true;
         },
-        handleUpload() {
-            // console.log(res,file)
-            this.submitUpload()
-            this.dialogVisible = false
+        HideUploadfile() {
+            this.dialogVisible = false;
+            this.getIndex();
         },
         getIndex() {
             axios({
@@ -142,18 +130,6 @@ export default {
                 console.log(err)
             })
             this.fields = []
-        },
-        start_loading() {
-            loading = this.$loading({
-                lock: true,
-                text: 'Loading',
-                spinner: 'el-icon-loading',
-                // background: 'rgba(0, 0, 0, 1)',
-                target: document.querySelector('#body')
-            });
-        },
-        stop_loading() {
-            loading.close()
         },
         print() {
             exportPDF('bar-chart', 'bar-chart')

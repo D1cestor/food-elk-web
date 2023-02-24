@@ -17,8 +17,8 @@ export default {
       type: Object,
       default(rawProps) {
         return {
-          labels: ['January', 'February', 'March'],
-          datasets: [{ data: [40, 20, 12] }]
+          labels: [],
+          datasets: [{}]
         }
       }
     },
@@ -53,10 +53,6 @@ export default {
   },
   data() {
     return {
-      // chartData: {
-      //   // labels: [ 'January', 'February', 'March' ],
-      //   // datasets: [ { data: [40, 20, 12] } ]
-      // },
       chartOptions: {
         responsive: true
       }

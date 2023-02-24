@@ -24,6 +24,11 @@ app.post('/aggregation', (req, res)  => {
     res.send(data)
 })
 
+app.post('/quality', (req, res) => {
+    res.send("80")
+})
+
+
 
 app.listen(port, () => {
     console.log(`App listening on http://localhost:${port}`)
